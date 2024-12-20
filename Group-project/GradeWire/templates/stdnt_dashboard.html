@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      width: 200px;
+      background-color: #2c3e50;
+      color: white;
+      position: fixed;
+      height: 100vh;
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .sidebar h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      padding: 10px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .sidebar a:hover {
+      background-color: #58bfff;
+    }
+
+    /* Main Content Styles */
+    .main {
+      margin-left: 200px;
+      padding: 20px;
+      flex-grow: 1;
+    }
+
+    .section {
+      display: none;
+      width: 100%;
+      max-width: 800px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .chart-container {
+      width: 100%;
+      max-width: 400px;
+      margin: 20px auto;
+    }
+
+    /* Responsive Sidebar */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        justify-content: space-evenly;
+        padding: 10px 0;
+      }
+
+      .sidebar h3 {
+        display: none; /* Hide title on smaller screens */
+      }
+
+      .sidebar a {
+        margin: 0;
+        font-size: 0.9rem;
+      }
+
+      .main {
+        margin: 0;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h3>Student Dashboard</h3>
+    <a href="#" data-target="home">Home</a>
+    <a href="#" data-target="profile">Profile</a>
+    <a href="#" data-target="attendance">Attendance</a>
+    <a href="#" data-target="grades">Grades</a>
+    <a href="#" data-target="schedule">Schedule</a>
+    <a href="#" data-target="logout">Logout</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Home Section -->
+    <div id="home" class="section active">
+      <h1>Welcome to Your Dashboard</h1>
+      <p>Navigate through the sidebar to access different sections.</p>
+    </div>
+
+    <!-- Profile Section -->
+    <div id="profile" class="section">
+      <h1>Profile</h1>
+      <p><strong>Name:</strong> John Doe</p>
+      <p><strong>Email:</strong> johndoe@example.com</p>
+    </div>
+
+    <!-- Attendance Section -->
+    <div id="attendance" class="section">
+      <h1>Attendance</h1>
+      <div class="chart-container">
+        <canvas id="attendanceChart"></canvas>
+      </div>
+      <h5 class="mt-3">Dates You Took Leave:</h5>
+      <ul>
+        <li>2024-01-15</li>
+        <li>2024-02-10</li>
+        <li>2024-03-05</li>
+      </ul>
+    </div>
+
+    <!-- Grades Section -->
+    <div id="grades" class="section">
+      <h1>Grades</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mathematics</td>
+            <td>A</td>
+          </tr>
+          <tr>
+            <td>Science</td>
+            <td>B+</td>
+          </tr>
+          <tr>
+            <td>History</td>
+            <td>A-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Schedule Section -->
+    <div id="schedule" class="section">
+      <h1>Class Schedule</h1>
+      <ul>
+        <li><strong>Monday:</strong> Mathematics (10:00 AM - 11:00 AM)</li>
+        <li><strong>Tuesday:</strong> Science (11:30 AM - 12:30 PM)</li>
+        <li><strong>Wednesday:</strong> History (1:00 PM - 2:00 PM)</li>
+      </ul>
+    </div>
+
+    <!-- Logout Section -->
+    <div id="logout" class="section">
+      <h1>Logout</h1>
+      <p>You have successfully logged out.</p>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Sidebar Navigation
+    document.querySelectorAll('.sidebar a').forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        const target = event.target.getAttribute('data-target');
+        document.querySelectorAll('.section').forEach(section => {
+          section.classList.remove('active');
+        });
+        document.getElementById(target).classList.add('active');
+      });
+    });
+
+    // Chart.js Initialization
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Present', 'Absent', 'Late'],
+        datasets: [{
+          data: [85, 10, 5],
+          backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)', 'rgba(255, 206, 86, 0.6)']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+  </script>
+</body>
+</html>

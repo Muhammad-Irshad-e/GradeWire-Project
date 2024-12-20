@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #1e3a5f;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+            transition: transform 0.3s ease;
+        }
+        .sidebar h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        .sidebar a {
+            text-decoration: none;
+            color: white;
+            padding: 15px 20px;
+            display: block;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+        .sidebar a:hover {
+            background-color: #2d5178;
+        }
+        .sidebar .logout {
+            margin-top: auto;
+            background-color: #c0392b;
+            text-align: center;
+            margin-bottom:10px;
+        }
+        .sidebar .logout:hover {
+            background-color: #e74c3c;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+        .header {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .stat-box {
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            flex: 1;
+            margin: 0 10px;
+            text-align: center;
+        }
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .chart {
+            width: 45%;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .table-container {
+            margin-top: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table-container table th,
+        .table-container table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .table-container table th {
+            background-color: #1e3a5f;
+            color: white;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        .form-container input, .form-container button {
+            margin: 5px 0;
+            padding: 10px;
+            width: calc(100% - 22px);
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-container button {
+            background-color: #1e3a5f;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #2d5178;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .content {
+                margin-left: 0;
+            }
+            .menu-toggle {
+                display: block;
+                background-color: #1e3a5f;
+                color: white;
+                padding: 10px;
+                text-align: center;
+                cursor: pointer;
+            }
+            .stats-container {
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+            .stat-box {
+                margin-bottom: 10px;
+            }
+            .chart-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .chart {
+                width: 90%;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-toggle" onclick="toggleSidebar()">☰ Menu</div>
+    <div class="sidebar">
+        <h2>Admin Dashboard</h2>
+        <a onclick="showSection('home')">Home</a>
+        <a onclick="showSection('manage-students')">Manage Students</a>
+        <a onclick="showSection('manage-teachers')">Manage Teachers</a>
+        <a onclick="showSection('manage-courses')">Manage Courses</a>
+        <a href="#" class="logout">Logout</a>
+    </div>
+
+    <div class="content">
+        <div class="header">
+            <h1>Welcome, Admin</h1>
+        </div>
+        <div id="home" class="section active">
+            <h2>Home</h2>
+            <div class="stats-container">
+                <div class="stat-box">
+                    <h3>Total Students</h3>
+                    <p>120</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Total Teachers</h3>
+                    <p>15</p>
+                </div>
+                <div class="stat-box">
+                    <h3>Total Courses</h3>
+                    <p>10</p>
+                </div>
+            </div>
+            <div class="chart-container">
+                <div class="chart">
+                    <h3>Student-Teacher Ratio</h3>
+                    <canvas id="studentTeacherChart"></canvas>
+                </div>
+                <div class="chart">
+                    <h3>Students in Each Course</h3>
+                    <canvas id="studentsCourseChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="manage-students" class="section">
+            <h2>Manage Students</h2>
+            <div class="form-container">
+                <input type="text" id="searchStudent" placeholder="Search Student">
+                <button onclick="searchStudent()">Search</button>
+                <input type="text" id="studentName" placeholder="Student Name">
+                <input type="text" id="studentClass" placeholder="Student Class">
+                <button onclick="addStudent()">Add Student</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Student rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+   <div id="manage-teachers" class="section">
+    <h2>Manage Teachers</h2>
+    <div class="form-container">
+        <input type="text" id="searchTeacher" placeholder="Search Teacher">
+        <button onclick="searchTeacher()">Search</button>
+        <input type="text" id="teacherName" placeholder="Teacher Name">
+        <input type="text" id="teacherSubject" placeholder="Subject">
+        <button onclick="addTeacher()">Add Teacher</button>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Subject</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="teacherTableBody">
+                <!-- Teacher rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+        
+       <div id="manage-courses" class="section">
+    <h2>Manage Courses</h2>
+    <div class="form-container">
+        <input type="text" id="courseName" placeholder="Course Name">
+        <input type="text" id="courseDescription" placeholder="Course Description">
+        <button onclick="addCourse()">Add Course</button>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Course Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="courseTableBody">
+                <!-- Course rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+
+            const activeSection = document.getElementById(sectionId);
+            if (activeSection) {
+                activeSection.classList.add('active');
+            }
+        }
+
+        function addStudent() {
+            const name = document.getElementById('studentName').value;
+            const studentClass = document.getElementById('studentClass').value;
+            if (name && studentClass) {
+                const tableBody = document.getElementById('studentTableBody');
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${Math.floor(Math.random() * 1000)}</td>
+                    <td>${name}</td>
+                    <td>${studentClass}</td>
+                    <td>
+                        <button onclick="editStudent(this)">Edit</button>
+                        <button onclick="deleteStudent(this)">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+
+                // Clear input fields
+                document.getElementById('studentName').value = '';
+                document.getElementById('studentClass').value = '';
+            } else {
+                alert('Please enter both student name and class.');
+            }
+        }
+
+        function deleteStudent(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        function editStudent(button) {
+            const row = button.closest('tr');
+            const nameCell = row.cells[1];
+            const classCell = row.cells[2];
+
+            const newName = prompt('Edit Student Name:', nameCell.textContent);
+            const newClass = prompt('Edit Student Class:', classCell.textContent);
+
+            if (newName) nameCell.textContent = newName;
+            if (newClass) classCell.textContent = newClass;
+        }
+
+        function searchStudent() {
+            const searchValue = document.getElementById('searchStudent').value.toLowerCase();
+            const tableRows = document.getElementById('studentTableBody').querySelectorAll('tr');
+
+            tableRows.forEach(row => {
+                const name = row.cells[1].textContent.toLowerCase();
+                const studentClass = row.cells[2].textContent.toLowerCase();
+
+                if (name.includes(searchValue) || studentClass.includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+       function addTeacher() {
+    const name = document.getElementById('teacherName').value;
+    const subject = document.getElementById('teacherSubject').value;
+    if (name && subject) {
+        const tableBody = document.getElementById('teacherTableBody');
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td>${Math.floor(Math.random() * 1000)}</td>
+            <td>${name}</td>
+            <td>${subject}</td>
+            <td>
+                <button onclick="editTeacher(this)">Edit</button>
+                <button onclick="deleteTeacher(this)">Delete</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+
+        // Clear input fields
+        document.getElementById('teacherName').value = '';
+        document.getElementById('teacherSubject').value = '';
+    } else {
+        alert('Please enter both teacher name and subject.');
+    }
+}
+
+function deleteTeacher(button) {
+    const row = button.closest('tr');
+    row.remove();
+}
+
+function editTeacher(button) {
+    const row = button.closest('tr');
+    const nameCell = row.cells[1];
+    const subjectCell = row.cells[2];
+
+    const newName = prompt('Edit Teacher Name:', nameCell.textContent);
+    const newSubject = prompt('Edit Teacher Subject:', subjectCell.textContent);
+
+    if (newName) nameCell.textContent = newName;
+    if (newSubject) subjectCell.textContent = newSubject;
+}
+
+function searchTeacher() {
+    const searchValue = document.getElementById('searchTeacher').value.toLowerCase();
+    const tableRows = document.getElementById('teacherTableBody').querySelectorAll('tr');
+
+    tableRows.forEach(row => {
+        const name = row.cells[1].textContent.toLowerCase();
+        const subject = row.cells[2].textContent.toLowerCase();
+
+        if (name.includes(searchValue) || subject.includes(searchValue)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+function addCourse() {
+    const name = document.getElementById('courseName').value;
+    const description = document.getElementById('courseDescription').value;
+    if (name && description) {
+        const tableBody = document.getElementById('courseTableBody');
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+            <td>${Math.floor(Math.random() * 1000)}</td>
+            <td>${name}</td>
+            <td>${description}</td>
+            <td>
+                <button onclick="deleteCourse(this)">Delete</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+
+        // Clear input fields
+        document.getElementById('courseName').value = '';
+        document.getElementById('courseDescription').value = '';
+    } else {
+        alert('Please enter both course name and description.');
+    }
+}
+
+function deleteCourse(button) {
+    const row = button.closest('tr');
+    row.remove();
+}
+
+
+        // Initializing the charts
+        const studentTeacherChartCtx = document.getElementById('studentTeacherChart').getContext('2d');
+        new Chart(studentTeacherChartCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Students', 'Teachers'],
+                datasets: [{
+                    data: [120, 15],
+                    backgroundColor: ['#1e90ff', '#ff6347'],
+                }]
+            }
+        });
+
+        const studentsCourseChartCtx = document.getElementById('studentsCourseChart').getContext('2d');
+        new Chart(studentsCourseChartCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Course 1', 'Course 2', 'Course 3', 'Course 4'],
+                datasets: [{
+                    label: 'Number of Students',
+                    data: [30, 25, 40, 25],
+                    backgroundColor: '#1e90ff',
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
