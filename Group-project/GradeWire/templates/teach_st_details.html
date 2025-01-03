@@ -1,0 +1,85 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/teach-style.css'%}">
+</head>
+<body>
+        <div class="menu-toggle" onclick="toggleSidebar()">☰ Menu</div>
+        <!-- Sidebar -->
+        <div class="sidebar">
+
+            <h2>Teacher Dashboard</h2>
+            
+            <a href="{% url 'teachHome' %}" >Home</a>
+            <a href="{% url 'teacherProfile' %}" >Profile</a>
+            <a href="{% url 'teachStAttendance' %}" >Attendance</a>
+            <a href="{% url 'teachStMarks' %}" >Marks</a>
+            <a href="{% url 'teachStStats' %}">Stats</a>
+            <a href="{% url 'teachStDetails' %}" >Students</a>
+            <!-- Logout option at the very bottom (only for Desktop) -->
+            <a href="javascript:void(0);" class="logout">Logout</a>
+           
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+           
+
+<div id="students" class="section">
+    <h2>View Student Details</h2>
+    <div class="attendance-table">
+    <table >
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Class</th>
+                <th>department</th>
+                <th>Register_id</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>Parent</th>
+                <th>Parent_no</th>
+                <th>Password</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>John Doe</td>
+                <td>3rd year</td>
+                <td>Mathematics</td>                           
+                <td>cs1</td>      
+                <td>+123456789</td>          
+                <td>john.doe@example.com</td>
+                <td>john</td>
+                <td>127698471</td>
+                <td>hi</td>
+            </tr>
+            <tr>
+                <td>Jane smith</td>
+                <td>3rd year</td>
+                <td>Mathematics</td>                           
+                <td>cs1</td>      
+                <td>+789456789</td>          
+                <td>jane.smith@example.com</td>
+                <td>james</td>
+                <td>356276471</td>
+                <td>ggrti</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+    </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

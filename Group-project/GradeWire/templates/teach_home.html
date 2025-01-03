@@ -4,12 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard</title>
+    <title>Document</title>
     <link rel="stylesheet" type="text/css" href="{% static 'assets/css/teach-style.css'%}">
 </head>
 <body>
-
-    
         <div class="menu-toggle" onclick="toggleSidebar()">☰ Menu</div>
         <!-- Sidebar -->
         <div class="sidebar">
@@ -29,26 +27,33 @@
 
         <!-- Main Content -->
         <div class="main-content">
-            <div class="header">
-                <h1>Welcome, Teacher</h1>
-            </div>
-            <!-- Home Section -->
-        
-
-            <!-- Profile Section -->
-           
-
-           <!-- Manage Attendance Section -->
-            
-
-            <!-- Manage Marks Section -->
-           
-
-            <!-- View Students Section -->
-           
-        </div>
+           <!-- Home Section -->
+<div id="home" class="section active">
+    <h2>Welcome to Your Dashboard</h2>
+    <p>This is your teacher dashboard where you can manage attendance, marks, and view students. Use the navigation on the left to access different sections.</p>
     
+    <div class="home-summary">
+        <div class="summary-box">
+            <h3>Total Students</h3>
+            <p>50</p>
+        </div>
+        <div class="summary-box">
+            <h3>Attendance Today</h3>
+            <p>40/50</p>
+        </div>
+        <div class="summary-box">
+            <h3>Recent Marks Updated</h3>
+            <p>5 Marks Updates Today</p>
+        </div>
+        <div class="summary-box">
+            <h3>Upcoming Events</h3>
+            <p>Next Exam: 15th Jan</p>
+        </div>
+    </div>
 
+</div>
+
+    </div>
     <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar');
