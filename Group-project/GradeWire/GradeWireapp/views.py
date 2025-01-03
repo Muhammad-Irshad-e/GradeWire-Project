@@ -121,6 +121,14 @@ def studentLogin(request):
 def student_dashboard_view(request):
     return render(request,'stdnt_dashboard.html')
 
+def manage_student_view(request):
+    students = models.Student.objects.all(is_student=True)
+    return render(request, 'admin_dashboard.html',{'student':students})
+
+def manage_teacher_view(request):
+    teachers = models.Teacher.objects.all(is_teacher=True)
+    return render(request, 'admin_dashboard.html',{'teacher':teachers})
+
 def afterlogin_view(request):
     if is_teacher(request.user):
         accountapproval=models.Teacher.objects.all().filter(user_id=request.user.id,status=True)
@@ -135,3 +143,21 @@ def afterlogin_view(request):
 @login_required
 def admin_dashboard_view(request):
     return render(request,'admin_dashboard.html')
+
+def teacher_profile_view(request):
+    return render(request,'teacher_profile.html')
+
+def teacher_attendance_view(request):
+    return render(request,'teach_st_attendance.html')
+
+def teacher_marks_view(request):
+    return render(request,'teach_st_marks.html')
+
+def teacher_stats_view(request):
+    return render(request,'teach_st_stats.html')
+
+def teacher_details_view(request):
+    return render(request,'teach_st_details.html')
+
+def teacher_home_view(request):
+    return render(request,'teach_home.html')
